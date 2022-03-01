@@ -34,6 +34,9 @@ mod =SourceModule("""
         float *nx, *ny;
         cudaMallocManaged(&nx, array_length*sizeof(float));
         cudaMallocManaged(&ny, array_length*sizeof(float));
+        for (int index = 0; index<array_length; index++) {
+            nx
+        }
 
   ...
         // Free memory
