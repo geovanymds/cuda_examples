@@ -4,7 +4,7 @@ import pycuda.driver as drv
 import numpy as numpy
 import codecs
 
-def readInput(input_path,delimiter):
+def read_input(input_path,delimiter):
     with codecs.open(input_path, encoding='utf-8-sig') as f:
         x = numpy.loadtxt(f, delimiter=delimiter)
     return x

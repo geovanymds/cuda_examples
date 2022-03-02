@@ -1,52 +1,6 @@
 import numpy as numpy
-import pycuda.autoinit
-import pycuda.driver as drv
-from pycuda.compiler import SourceModule
 
-# mod = SourceModule("""
-# __global__ void fit(float *dest, float *a, float *b)
-# {
-#   const int i = threadIdx.x;
-#   dest[i] = a[i] * b[i];
-# }
-# """)
-
-# def test_pycuda():
-#     multiply_them = mod.get_function("multiply_them")
-#     a = numpy.random.randn(400).astype(numpy.float32)
-#     b = numpy.random.randn(400).astype(numpy.float32)
-
-#     dest = numpy.zeros_like(a)
-#     multiply_them(
-#             drv.Out(dest), drv.In(a), drv.In(b),
-#             block=(400,1,1), grid=(1,1))
-
-#     print(dest-a*b)
-
-mod =SourceModule("""
-//cuda
-    #include <stdio.h>
-
-    __global__ void fit(float *current_integrated_sample, int current_scale, int grade) 
-    {
-        float a1 = 0.8, a2 = 0.14, a3 = 0.42;
-        int array_length = current_scale;
-        float *nx, *ny;
-        cudaMallocManaged(&nx, array_length*sizeof(float));
-        cudaMallocManaged(&ny, array_length*sizeof(float));
-        for (int index = 0; index<array_length; index++) {
-            nx
-        }
-
-  ...
-        // Free memory
-        cudaFree(nx);
-        cudaFree(ny);
-    }
-
-//!cuda
-""")
-
+#ORIGINAL NÃO PARALELISADO
 def fit_2D(current_integrated_sample, current_scale, grade):
     # coefficients of the model
     a1, a2, a3 = 0.8, 0.14, 0.42
