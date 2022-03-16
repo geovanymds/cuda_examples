@@ -8,41 +8,6 @@ import pycuda.driver as drv
 from pycuda.compiler import SourceModule
 from robust_last_square import fit_2D
 
-# mod =SourceModule("""
-# //cuda
-#     #include <stdio.h>
-
-#     __global__ void fit(float *current_integrated_sample, int current_scale, int grade) 
-#     {
-#         // float a1 = 0.8, a2 = 0.14, a3 = 0.42;
-#         int array_length = current_scale;
-#         extern __shared__ int nx[];
-#         extern __shared__ int ny[];
-#         for (int index = 0; index < array_length; index++) {
-#             nx[index] = index + 1;
-#             ny[index] = index + 1;
-#         }
-#         __syncthreads();
-#     }
-
-# //!cuda
-# """)
-
-# local_fit = mod.get_function("fit")
-
-# def fit_2D(current_integrated_sample, current_scale, grade):
-#     block_size = (current_scale, 1, 1)
-#     grid_size = numpy.floor((len(current_integrated_sample)/current_scale)).astype(int)
-#     grid = (grid_size, grid_size, 1)
-#     local_fit(
-#         #inputs
-#         current_integrated_sample, current_scale, grade,
-#         #outputs
-#         #kernel params
-#         block=block_size,
-#         grid = (grid_size,grid_size, 1)
-#         )
-
 def dfa_2d(mat, grade):
     begin_time = time.time()
     [width, height] = numpy.shape(mat)
@@ -81,17 +46,6 @@ def dfa_2d(mat, grade):
     return (slope, end_time-begin_time, y.reshape(1,-1))
 
 def main(input_path, output_path, delimiter, output_file):
-    arqs = os.listdir(input_path)
-    arqs = sorted(arqs, key=lambda x: int((x.split('_')[1].split('.')[0])))
-    for file in arqs:
-        if file.endswith('.txt'):
-            print(file)
-            m = utils.read_input(input_path + file,delimiter)
-            alfa, tempo, F = dfa_2d(m, 1)
-            dt = numpy.dtype(str, 10)
-            b = numpy.array([alfa, tempo], dtype=dt)
-            b = numpy.reshape(b, newshape=(1, 2))
-            with open(output_path + output_file, 'ab') as f:
-                numpy.savetxt(f, b, fmt='%10s')
+    utils.check_pycuda_config()
 
 main("./data/input/fGn/fGn09/","./data/output/",",","results_fGn09.txt")
