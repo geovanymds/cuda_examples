@@ -1,7 +1,0 @@
-appdirs==1.4.4
-Mako==1.1.6
-MarkupSafe==2.1.0
-numpy==1.22.2
-platformdirs==2.5.1
-pycuda==2021.1
-pytools==2022.1.1
